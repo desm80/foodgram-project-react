@@ -30,5 +30,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         """Подписан ли пользователь на автора."""
+        request = self.context.get('request')
+        if not request or request.user.is_anonymous:
+            return False
         return Follow.objects.filter(user=self.context['request'].user,
                                      author=obj).exists()
