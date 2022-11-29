@@ -8,13 +8,13 @@ from users.models import Follow
 User = get_user_model()
 
 
-class CurrentUserDefaultId(object):
-    requires_context = True
-
-    def __call__(self, serializer_instance=None):
-        if serializer_instance is not None:
-            self.user_id = serializer_instance.context['request'].user.id
-            return self.user_id
+# class CurrentUserDefaultId(object):
+#     requires_context = True
+#
+#     def __call__(self, serializer_instance=None):
+#         if serializer_instance is not None:
+#             self.user_id = serializer_instance.context['request'].user.id
+#             return self.user_id
 
 
 class UserSerializer(UserSerializer):
