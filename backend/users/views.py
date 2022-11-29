@@ -9,7 +9,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, CustomUserCreateSerializer
 
 User = get_user_model()
 
@@ -18,7 +18,13 @@ class UserViewSet(viewsets.ModelViewSet):
     """Описание логики работы АПИ для эндпоинта users."""
 
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    # serializer_class = UserSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return UserSerializer
+        if self.action == 'create':
+            return CustomUserCreateSerializer
 
     @action(methods=['patch', 'get'],
             permission_classes=[IsAuthenticated],

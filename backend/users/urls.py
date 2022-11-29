@@ -17,5 +17,8 @@ urlpatterns = [
     path('auth/token/login/',
          TokenCreateView.as_view(),
          name='login'),
+    # path('auth/token/logout/',
+    #      CustomTokenDestroyView.as_view(),
+    #      name='logout'),
 
 ]
