@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'django_filters',
     'rest_framework.authtoken',
+    'django_filters',
     'djoser',
     'api',
     'recipes',
@@ -166,3 +166,21 @@ REST_FRAMEWORK = {
     ),
 }
 
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'USER_ID_FIELD': 'id',
+    'HIDE_USERS': False,
+    'USERNAME_CHANGED_EMAIL_CONFIRMATION': False,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': False,
+    'SEND_CONFIRMATION_EMAIL': False,
+    'SEND_ACTIVATION_EMAIL': False,
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.CustomUserCreateSerializer',
+        'user': 'users.serializers.UserSerializer',
+        'current_user': 'users.serializers.UserSerializer',
+        'set_password': 'djoser.serializers.SetPasswordSerializer',
+    },
+    'PERMISSIONS': {
+        'user': ['rest_framework.permissions.AllowAny'],
+    }
+}
