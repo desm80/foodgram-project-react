@@ -8,6 +8,15 @@ from users.models import Follow
 User = get_user_model()
 
 
+class CurrentUserDefaultId(object):
+    requires_context = True
+
+    def __call__(self, serializer_instance=None):
+        if serializer_instance is not None:
+            self.user_id = serializer_instance.context['request'].user.id
+            return self.user_id
+
+
 class UserSerializer(UserSerializer):
     """Сериализатор для эндпоита users."""
 
@@ -43,7 +52,6 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         model = User
         fields = (
             'email',
-            'id',
             'username',
             'first_name',
             'last_name',
