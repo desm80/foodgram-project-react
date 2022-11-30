@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer, UserSerializer, SetPasswordSerializer
 
@@ -8,16 +7,7 @@ from users.models import Follow
 User = get_user_model()
 
 
-# class CurrentUserDefaultId(object):
-#     requires_context = True
-#
-#     def __call__(self, serializer_instance=None):
-#         if serializer_instance is not None:
-#             self.user_id = serializer_instance.context['request'].user.id
-#             return self.user_id
-
-
-class UserSerializer(UserSerializer):
+class MyUserSerializer(UserSerializer):
     """Сериализатор для эндпоита users."""
 
     is_subscribed = serializers.SerializerMethodField(read_only=True)
