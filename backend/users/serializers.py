@@ -20,13 +20,6 @@ class MyUserSerializer(UserSerializer):
         )
         # lookup_field = 'username'
 
-    def validate_username(self, value):
-        if value == 'me':
-            raise serializers.ValidationError(
-                'Нельзя использовать имя me в качестве имени пользователя.'
-            )
-        return value
-
     def get_is_subscribed(self, obj):
         """Подписан ли пользователь на автора."""
         request = self.context.get('request')
@@ -36,7 +29,7 @@ class MyUserSerializer(UserSerializer):
                                      author=obj).exists()
 
 
-class CustomUserCreateSerializer(UserCreateSerializer):
+class MyUserCreateSerializer(UserCreateSerializer):
     """Сериализатор для создания модели User."""
     class Meta:
         model = User

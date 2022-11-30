@@ -175,9 +175,9 @@ DJOSER = {
     'SEND_CONFIRMATION_EMAIL': False,
     'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS': {
-        'user_create': 'users.serializers.CustomUserCreateSerializer',
-        'user': 'users.serializers.UserSerializer',
-        'current_user': 'users.serializers.UserSerializer',
+        'user_create': 'users.serializers.MyUserCreateSerializer',
+        'user': 'users.serializers.MyUserSerializer',
+        'current_user': 'users.serializers.MyUserSerializer',
         'set_password': 'djoser.serializers.SetPasswordSerializer',
     },
     'PERMISSIONS': {

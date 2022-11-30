@@ -13,7 +13,6 @@ router.register('users', MyUserViewSet, basename='users')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('', include('djoser.urls')),
     path('auth/token/login/',
          TokenCreateView.as_view(),
          name='login'),
