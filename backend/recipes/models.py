@@ -8,7 +8,10 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200,
+        unique=True
+    )
     color = models.CharField(
         max_length=7,
         unique=True,
@@ -65,14 +68,23 @@ class Recipe(models.Model):
         null=False,
         )
     text = models.TextField()
-    cooking_time = models.SmallIntegerField(validators=[
-        MinValueValidator(1),
-    ])
+    cooking_time = models.SmallIntegerField(
+        validators=[
+            MinValueValidator(1),
+        ]
+    )
 
 
 class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.SmallIntegerField(validators=[
-        MinValueValidator(1),
-    ])
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE
+    )
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.CASCADE)
+    amount = models.SmallIntegerField(
+        validators=[
+            MinValueValidator(1),
+        ]
+    )
