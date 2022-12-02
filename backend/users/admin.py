@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import User
 
 
+@admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """Отображение модели User в Админке."""
 
@@ -28,6 +29,3 @@ class UserAdmin(admin.ModelAdmin):
         'author',
     )
     empty_value_display = '-пусто-'
-
-
-admin.site.register(User, UserAdmin)
