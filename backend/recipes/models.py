@@ -31,9 +31,8 @@ class Tag(models.Model):
                 name='unique_tag')
         ]
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Tag, self).save(*args, **kwargs)
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Ingredient(models.Model):

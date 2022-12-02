@@ -27,7 +27,8 @@ class User(AbstractUser):
         return self.role == self.ADMIN or self.is_superuser
 
     def __str__(self):
-        return self.username
+        # return self.username
+        return self.get_full_name()
 
 
 class Follow(models.Model):
