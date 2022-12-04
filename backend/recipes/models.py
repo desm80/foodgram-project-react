@@ -1,4 +1,5 @@
-from django.core.validators import MinValueValidator, RegexValidator
+from colorfield.fields import ColorField
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models import UniqueConstraint
@@ -11,16 +12,14 @@ class Tag(models.Model):
         max_length=200,
         unique=True
     )
-    color = models.CharField(
-        max_length=7,
+    color = ColorField(
         unique=True,
+        max_length=7,
+        verbose_name='Цвет в HEX',
+        blank=True,
         null=True,
-        validators=[
-            RegexValidator(
-                regex='^#(?:[0-9a-fA-F]{1,2}){3}$',
-                message='HEX color required')
-        ],
-    )
+        default='#FFFFE0'
+        )
     slug = models.SlugField(max_length=200, unique=True)
 
     class Meta:
@@ -90,3 +89,55 @@ class RecipeIngredient(models.Model):
         ]
     )
 
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=('ingredient', 'recipe',),
+                name='unique_recipe_ingredient_amount',
+            ),
+        )
+
+    def __str__(self):
+        return f'{self.recipe}: {self.ingredient} – {self.amount}'
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='favorites_user',
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='favorites',
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=('user', 'recipe',),
+                name='unique_favorite',
+            ),
+        ]
+
+
+class ShoppingCart(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='carts',
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='carts',
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=('user', 'recipe'),
+                name='unique_shopping_cart',
+            ),
+        ]

@@ -17,3 +17,4 @@ sqlparse==0.3.1
 flake8-isort==5.0.0
 djoser
 Pillow
+django-colorfield==0.7.1
