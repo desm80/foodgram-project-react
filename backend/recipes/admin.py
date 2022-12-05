@@ -39,6 +39,7 @@ class IngredientAdmin(admin.ModelAdmin):
         'measurement_unit',
     )
     list_filter = (
+        'name',
         'measurement_unit',
     )
     search_fields = (
@@ -71,17 +72,34 @@ class RecipeAdmin(admin.ModelAdmin):
         'pk',
         'name',
         'author',
+        'get_favorites',
     )
     list_editable = (
         'name',
     )
     list_filter = (
         'author',
+        'name',
         'tags',
     )
     search_fields = (
         'name',
     )
     inlines = (RecipeIngredientsInline,)
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        field = super(RecipeAdmin, self).formfield_for_dbfield(
+            db_field, **kwargs
+        )
+        if db_field.name == "author":
+            field.initial = kwargs["request"].user.id
+        return field
+
+    def get_favorites(self, obj):
+        return obj.favorites.count()
+
+    get_favorites.short_description = (
+        'Число добавлений этого рецепта в избранное'
+    )
     empty_value_display = '-пусто-'
 
