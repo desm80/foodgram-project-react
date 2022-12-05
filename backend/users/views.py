@@ -34,6 +34,7 @@ class FollowViewSet(CreateModelMixin, DestroyModelMixin, GenericViewSet):
     #     return self.request.user.follower.all()
 
     def perform_create(self, serializer):
-        author = get_object_or_404(User, id=self.id)
+        id = self.kwargs.get("pk")
+        author = get_object_or_404(User, id=id)
         serializer.save(user=self.request.user, author=author)
 
