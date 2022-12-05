@@ -72,12 +72,9 @@ class FollowViewSet(APIView):
 
 
 class FollowListView(ListAPIView):
-    """
-    APIView для просмотра подписок.
-    """
+    """APIView для просмотра подписок."""
     serializer_class = FollowSerializer
     # permission_classes = [IsAuthenticated]
-    # pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         return User.objects.filter(following__user=self.request.user)
