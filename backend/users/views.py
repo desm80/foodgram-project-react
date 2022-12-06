@@ -27,7 +27,7 @@ class MyUserViewSet(UserViewSet):
 
 class FollowViewSet(APIView):
     """APIView для добавления и удаления подписки на автора."""
-    serializer_class = FollowSerializer
+    # serializer_class = FollowSerializer
     # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -51,7 +51,7 @@ class FollowViewSet(APIView):
             author_id=user_id
         )
         return Response(
-            self.serializer_class(author, context={'request': request}).data,
+            FollowSerializer(author, context={'request': request}).data,
             status=status.HTTP_201_CREATED
         )
 
@@ -79,3 +79,14 @@ class FollowListView(ListAPIView):
     def get_queryset(self):
         return User.objects.filter(following__user=self.request.user)
         # return self.request.user.follower.all()
+
+
+
+# class FollowListView(APIView):
+#     """APIView для просмотра подписок."""
+#
+#     def get(self, request):
+#         subs = User.objects.filter(following__user=self.request.user)
+#         serializer = FollowSerializer(subs, many=True)
+#         return Response(serializer.data)
+
