@@ -68,7 +68,7 @@ class FollowViewSet(APIView):
         return Response(
             {'error': 'Вы не подписаны на пользователя'},
             status=status.HTTP_400_BAD_REQUEST
-       )
+        )
 
 
 class FollowListView(ListAPIView):

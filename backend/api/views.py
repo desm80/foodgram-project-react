@@ -1,12 +1,12 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from requests import Response
 from rest_framework import viewsets, filters, status
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import TagSerializer, IngredientSerializer, \
-    RecipeSerializer, FavoriteSerializer
-from recipes.models import Tag, Ingredient, Recipe, Favorite
+    RecipeSerializer, FavoriteShoppingSerializer
+from recipes.models import Tag, Ingredient, Recipe, Favorite, ShoppingCart
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -41,14 +41,68 @@ class FavoriteAPIView(APIView):
     def post(self, request,  *args, **kwargs):
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
+        if Favorite.objects.filter(
+                user=request.user,
+                recipe_id=recipe_id
+        ).exists():
+            return Response(
+                {'error': 'Рецепт уже добавлен в избранное'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         Favorite.objects.create(user=request.user, recipe=recipe)
         return Response(
-            FavoriteSerializer(recipe, context={'request': request}).data,
+            FavoriteShoppingSerializer(
+                recipe, context={'request': request}).data,
             status=status.HTTP_201_CREATED
         )
 
+    def delete(self, request, *args, **kwargs):
+        recipe_id = self.kwargs['recipe_id']
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        favorite = Favorite.objects.filter(
+            user=request.user,
+            recipe=recipe
+        )
+        if favorite:
+            favorite.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {'error': 'Рецепта нет в вашем списке избранного'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+class ShoppingCartAPIView(APIView):
+
+    def post(self, request,  *args, **kwargs):
+        recipe_id = self.kwargs['recipe_id']
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        if ShoppingCart.objects.filter(
+                user=request.user,
+                recipe_id=recipe_id
+        ).exists():
+            return Response(
+                {'error': 'Рецепт уже добавлен в список покупок'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        ShoppingCart.objects.create(user=request.user, recipe=recipe)
+        return Response(
+            FavoriteShoppingSerializer(
+                recipe, context={'request': request}).data,
+            status=status.HTTP_201_CREATED
+        )
 
     def delete(self, request, *args, **kwargs):
-        ...
-
-
+        recipe_id = self.kwargs['recipe_id']
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        cart = ShoppingCart.objects.filter(
+            user=request.user,
+            recipe=recipe
+        )
+        if cart:
+            cart.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {'error': 'Рецепта нет в вашем списке покупок'},
+            status=status.HTTP_400_BAD_REQUEST
+        )

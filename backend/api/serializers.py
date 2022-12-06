@@ -82,7 +82,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         return ShoppingCart.objects.filter(user=user, recipe=obj).exists()
 
 
-class FavoriteSerializer(serializers.ModelSerializer):
+class FavoriteShoppingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
