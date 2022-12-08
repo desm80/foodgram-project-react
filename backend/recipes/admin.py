@@ -98,7 +98,7 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.favorites.count()
 
     get_favorites.short_description = (
-        'Число добавлений этого рецепта в избранное'
+        'Число добавлений в избранное'
     )
     empty_value_display = '-пусто-'
 

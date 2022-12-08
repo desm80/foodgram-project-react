@@ -3,6 +3,7 @@ import base64
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from recipes.models import Tag, Ingredient, Recipe, RecipeIngredient, Favorite, \
     ShoppingCart
@@ -91,7 +92,13 @@ class FavoriteShoppingSerializer(serializers.ModelSerializer):
 
 # id = serializers.IntegerField(source='ingredient.id')
 class IngredientForRecipeSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all(),
+        validators=[UniqueValidator(
+            queryset=Ingredient.objects.all(),
+            message='Ингредиенты не должны повторяться'
+            )]
+        )
     amount = serializers.IntegerField()
 
     class Meta:
@@ -102,7 +109,11 @@ class IngredientForRecipeSerializer(serializers.ModelSerializer):
 class RecipePostUpdateSerializer(serializers.ModelSerializer):
     ingredients = IngredientForRecipeSerializer(many=True)
     tags = serializers.PrimaryKeyRelatedField(
-        queryset=Tag.objects.all(), many=True
+        queryset=Tag.objects.all(), many=True,
+        validators=[UniqueValidator(
+            queryset=Tag.objects.all(),
+            message='Тэги не должны повторяться'
+        )]
     )
     image = Base64ImageField()
     author = MyUserSerializer(read_only=True)
@@ -112,7 +123,12 @@ class RecipePostUpdateSerializer(serializers.ModelSerializer):
         fields = ('id', 'tags', 'author', 'ingredients', 'name', 'image',
                   'text', 'cooking_time')
 
+    def validate(self, data):
 
+
+
+
+        return data
 
 
 
