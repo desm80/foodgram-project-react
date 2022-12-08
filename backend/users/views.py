@@ -22,7 +22,7 @@ User = get_user_model()
 
 
 class MyUserViewSet(UserViewSet):
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'head']
 
 
 class FollowViewSet(APIView):

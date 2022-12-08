@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import TagSerializer, IngredientSerializer, \
-    RecipeSerializer, FavoriteShoppingSerializer
+    RecipeSerializer, FavoriteShoppingSerializer, RecipePostUpdateSerializer
 from recipes.models import Tag, Ingredient, Recipe, Favorite, ShoppingCart, \
     RecipeIngredient
 
@@ -34,8 +34,15 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """Описание логики работы АПИ для эндпоинта Recipe."""
-    serializer_class = RecipeSerializer
+    # serializer_class = RecipeSerializer
     queryset = Recipe.objects.all()
+
+    def get_serializer_class(self):
+
+        if self.request.method == 'GET':
+            return RecipeSerializer
+        else:
+            return RecipePostUpdateSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

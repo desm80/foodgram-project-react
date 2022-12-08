@@ -78,11 +78,14 @@ class Recipe(models.Model):
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='recipeingredients',
     )
     ingredient = models.ForeignKey(
         Ingredient,
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+        related_name='recipeingredients',
+    )
     amount = models.SmallIntegerField(
         validators=[
             MinValueValidator(1),
