@@ -28,10 +28,10 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
-        lookup_field = 'slug'
-        extra_kwargs = {
-            'url': {'lookup_field': 'slug'}
-        }
+        # lookup_field = 'slug'
+        # extra_kwargs = {
+        #     'url': {'lookup_field': 'slug'}
+        # }
 
 
 class IngredientSerializer(serializers.ModelSerializer):

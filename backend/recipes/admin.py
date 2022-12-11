@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Tag, Ingredient, Recipe, RecipeIngredient
+from .models import Tag, Ingredient, Recipe, RecipeIngredient, Favorite
 
 
 @admin.register(Tag)
@@ -95,6 +95,7 @@ class RecipeAdmin(admin.ModelAdmin):
         return field
 
     def get_favorites(self, obj):
+        # return Favorite.objects.filter(recipe=obj).count()
         return obj.favorites.count()
 
     get_favorites.short_description = (

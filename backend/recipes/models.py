@@ -74,6 +74,9 @@ class Recipe(models.Model):
         ]
     )
 
+    class Meta:
+        ordering = ('-id',)
+
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
