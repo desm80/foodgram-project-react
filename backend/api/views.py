@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.filters import RecipeFilter, IngredientFilter
 from api.serializers import TagSerializer, IngredientSerializer, \
     RecipeSerializer, FavoriteShoppingSerializer, RecipePostUpdateSerializer
 from recipes.models import Tag, Ingredient, Recipe, Favorite, ShoppingCart, \
@@ -28,14 +29,15 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     queryset = Ingredient.objects.all()
     pagination_class = None
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('^name',)
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
+    filterset_class = IngredientFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """Описание логики работы АПИ для эндпоинта Recipe."""
-    # serializer_class = RecipeSerializer
     queryset = Recipe.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = RecipeFilter
 
     def get_serializer_class(self):
 
