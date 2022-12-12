@@ -2,12 +2,15 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, filters, status, permissions
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, \
+    IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.filters import RecipeFilter, IngredientFilter
+from api.permissions import IsAdminAuthorOrReadOnly
 from api.serializers import TagSerializer, IngredientSerializer, \
     RecipeSerializer, FavoriteShoppingSerializer, RecipePostUpdateSerializer
 from recipes.models import Tag, Ingredient, Recipe, Favorite, ShoppingCart, \
@@ -29,15 +32,16 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     queryset = Ingredient.objects.all()
     pagination_class = None
-    filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
-    filterset_class = IngredientFilter
+    filter_backends = (IngredientFilter,)
+    search_fields = ('^name',)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """Описание логики работы АПИ для эндпоинта Recipe."""
     queryset = Recipe.objects.all()
-    filter_backends = (DjangoFilterBackend,)
+    permission_classes = (IsAuthenticatedOrReadOnly, ) #IsAdminAuthorOrReadOnly,
     filterset_class = RecipeFilter
+
 
     def get_serializer_class(self):
 
@@ -50,7 +54,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     @action(detail=False,
-            permission_classes=[permissions.IsAuthenticated],
+            permission_classes=[IsAuthenticated],
             methods=['GET']
             )
     def download_shopping_cart(self, request):
@@ -77,6 +81,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class FavoriteAPIView(APIView):
     """Описание логики работы АПИ для эндпоинта Favorite."""
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request,  *args, **kwargs):
         recipe_id = self.kwargs['recipe_id']
@@ -114,6 +119,7 @@ class FavoriteAPIView(APIView):
 
 class ShoppingCartAPIView(APIView):
     """Описание логики работы АПИ для эндпоинта ShoppingCart."""
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request,  *args, **kwargs):
         recipe_id = self.kwargs['recipe_id']
