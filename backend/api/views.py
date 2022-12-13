@@ -10,7 +10,8 @@ from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, \
+    IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -38,7 +39,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     """Описание логики работы АПИ для эндпоинта Recipe."""
     queryset = Recipe.objects.all()
-    permission_classes = (IsAdminAuthorOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     #  IsAdminAuthorOrReadOnly, IsAuthenticatedOrReadOnly
     filterset_class = RecipeFilter
 
