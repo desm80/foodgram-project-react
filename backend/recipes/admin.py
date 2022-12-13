@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Tag, Ingredient, Recipe, RecipeIngredient, Favorite
+from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                     ShoppingCart, Tag)
 
 
 @admin.register(Tag)
@@ -102,4 +103,26 @@ class RecipeAdmin(admin.ModelAdmin):
         'Число добавлений в избранное'
     )
     empty_value_display = '-пусто-'
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    """Отображение модели Favorite в Админке."""
+
+    list_display = (
+        'pk',
+        'user',
+        'recipe',
+    )
+
+
+@admin.register(ShoppingCart)
+class ShoppingCartAdmin(admin.ModelAdmin):
+    """Отображение модели ShoppingCart в Админке."""
+
+    list_display = (
+        'pk',
+        'user',
+        'recipe',
+    )
 

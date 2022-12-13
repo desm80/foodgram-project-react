@@ -1,20 +1,21 @@
+from api.filters import IngredientFilter, RecipeFilter
+from api.paginator import CustomPaginator
+from api.permissions import IsAdminAuthorOrReadOnly
+from api.serializers import (FavoriteShoppingSerializer, IngredientSerializer,
+                             RecipePostUpdateSerializer, RecipeSerializer,
+                             TagSerializer)
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, status
+from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, \
-    IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from api.filters import RecipeFilter, IngredientFilter
-from api.permissions import IsAdminAuthorOrReadOnly
-from api.serializers import TagSerializer, IngredientSerializer, \
-    RecipeSerializer, FavoriteShoppingSerializer, RecipePostUpdateSerializer
-from recipes.models import Tag, Ingredient, Recipe, Favorite, ShoppingCart, \
-    RecipeIngredient
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -32,16 +33,19 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     queryset = Ingredient.objects.all()
     pagination_class = None
-    filter_backends = (IngredientFilter,)
-    search_fields = ('^name',)
+    # filter_backends = (IngredientFilter,)
+    # search_fields = ('^name',)
+    filterset_class = IngredientFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """Описание логики работы АПИ для эндпоинта Recipe."""
     queryset = Recipe.objects.all()
-    permission_classes = (IsAuthenticatedOrReadOnly, ) #IsAdminAuthorOrReadOnly,
+    # pagination_class = CustomPaginator
+    permission_classes = (IsAdminAuthorOrReadOnly,
+                          ) #IsAdminAuthorOrReadOnly,
+    # IsAuthenticatedOrReadOnly
     filterset_class = RecipeFilter
-
 
     def get_serializer_class(self):
 

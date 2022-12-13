@@ -11,12 +11,15 @@ class User(AbstractUser):
         (ADMIN, 'Admin'),
     ]
     email = models.EmailField(max_length=254, unique=True)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    role = models.CharField(max_length=10, choices=USER_ROLES, default='user')
+    first_name = models.CharField(max_length=150, verbose_name='Имя')
+    last_name = models.CharField(max_length=150, verbose_name='Фамилия')
+    role = models.CharField(max_length=10, choices=USER_ROLES,
+                            default='user', verbose_name='Роль')
 
     class Meta:
         ordering = ('username',)
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
     @property
     def is_user(self):
@@ -35,16 +38,21 @@ class Follow(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='follower'
+        related_name='follower',
+        verbose_name='Подписчик'
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following'
+        related_name='following',
+        verbose_name='Автор'
     )
 
     class Meta:
         unique_together = ('user', 'author')
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+
 
     def __str__(self):
         return f'{self.user} {self.author}'
