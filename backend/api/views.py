@@ -43,6 +43,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filterset_class = RecipeFilter
 
     def get_serializer_class(self):
+        """Получение сериализатора для работы с Рецептами."""
 
         if self.request.method == 'GET':
             return RecipeSerializer
@@ -50,6 +51,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return RecipePostUpdateSerializer
 
     def perform_create(self, serializer):
+        """Подстановка текущего пользователя в авторы рецепта."""
         serializer.save(author=self.request.user)
 
     @action(detail=False,
@@ -57,6 +59,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             methods=['GET']
             )
     def download_shopping_cart(self, request):
+        """Обработка скачивания списка Покупок."""
 
         ingredients = RecipeIngredient.objects.filter(
             recipe__carts__user=request.user).values(
@@ -83,6 +86,7 @@ class FavoriteAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
+        """Добавление рецепта в Избранное."""
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
         if Favorite.objects.filter(
@@ -101,6 +105,7 @@ class FavoriteAPIView(APIView):
         )
 
     def delete(self, request, *args, **kwargs):
+        """Удаление рецепта из Избранного."""
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
         favorite = Favorite.objects.filter(
@@ -121,6 +126,7 @@ class ShoppingCartAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
+        """Добавление рецепта в список Покупок."""
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
         if ShoppingCart.objects.filter(
@@ -139,6 +145,7 @@ class ShoppingCartAPIView(APIView):
         )
 
     def delete(self, request, *args, **kwargs):
+        """Удаление рецепта из списка Покупок."""
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
         cart = ShoppingCart.objects.filter(

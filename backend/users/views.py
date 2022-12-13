@@ -14,6 +14,7 @@ User = get_user_model()
 
 
 class MyUserViewSet(UserViewSet):
+    """Переопределение допустимых методов для сериализатора Djoser."""
     http_method_names = ['get', 'post', 'head']
 
 
@@ -23,6 +24,7 @@ class FollowViewSet(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        """Создание подписки."""
         user_id = self.kwargs.get('user_id')
         if user_id == request.user.id:
             return Response(
@@ -48,6 +50,7 @@ class FollowViewSet(APIView):
         )
 
     def delete(self, request, *args, **kwargs):
+        """Удаление подписки."""
         user_id = self.kwargs.get('user_id')
         get_object_or_404(User, id=user_id)
         subscription = Follow.objects.filter(
@@ -69,5 +72,6 @@ class FollowListView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return User.objects.filter(following__user=self.request.user)
-        # return self.request.user.follower.all()
+        """Получение списка Авторов, на которых"""
+        #  return User.objects.filter(following__user=self.request.user)
+        return self.request.user.follower.all()

@@ -33,6 +33,8 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
+    """Отображение модели Follow в Админке."""
+
     list_display = (
         'pk',
         'user',

@@ -12,6 +12,7 @@ User = get_user_model()
 
 
 class Base64ImageField(serializers.ImageField):
+    """Декодирование картинки из формата Base64."""
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
             format, imgstr = data.split(';base64,')
@@ -22,6 +23,7 @@ class Base64ImageField(serializers.ImageField):
 
 
 class TagSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Tag."""
     class Meta:
         model = Tag
         fields = '__all__'
@@ -32,12 +34,14 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Ingredient."""
     class Meta:
         model = Ingredient
         fields = '__all__'
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели RecipeIngredient."""
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
@@ -50,6 +54,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Recipe. Чтение."""
     tags = TagSerializer(many=True, read_only=True)
     author = MyUserSerializer(read_only=True)
     ingredients = serializers.SerializerMethodField(read_only=True)
@@ -64,16 +69,19 @@ class RecipeSerializer(serializers.ModelSerializer):
                   'cooking_time',)
 
     def get_ingredients(self, obj):
+        """Получение Кверисета с ингредиентами."""
         queryset = RecipeIngredient.objects.filter(recipe=obj)
         return RecipeIngredientSerializer(queryset, many=True).data
 
     def get_is_favorited(self, obj):
+        """Добавлен ли рецепт в Избранное."""
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
         return Favorite.objects.filter(user=user, recipe=obj).exists()
 
     def get_is_in_shopping_cart(self, obj):
+        """Добавлен ли рецепт в список Покупок."""
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
@@ -81,12 +89,14 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class FavoriteShoppingSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Favorite и ShoppingCart."""
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
 
 
 class IngredientForRecipeSerializer(serializers.ModelSerializer):
+    """Сериализатор для добавления ингредиентов при создании рецепта."""
     id = serializers.IntegerField()
     amount = serializers.IntegerField(
         validators=[MinValueValidator(
@@ -102,6 +112,7 @@ class IngredientForRecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipePostUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Recipe. Создание, Обновление."""
     ingredients = IngredientForRecipeSerializer(many=True)
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(), many=True
@@ -115,6 +126,7 @@ class RecipePostUpdateSerializer(serializers.ModelSerializer):
                   'text', 'cooking_time')
 
     def validate(self, data):
+        """Проверка входящих данных на валидность."""
         cooking_time = data['cooking_time']
         ingredients = data['ingredients']
         tags = data['tags']
@@ -144,6 +156,7 @@ class RecipePostUpdateSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        """Создание нового рецепта."""
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
 
@@ -163,6 +176,7 @@ class RecipePostUpdateSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
+        """Обновление рецепта."""
         instance.ingredients.clear()
         instance.tags.clear()
         instance.image = validated_data.get('image', instance.image)
@@ -190,5 +204,6 @@ class RecipePostUpdateSerializer(serializers.ModelSerializer):
         return instance
 
     def to_representation(self, value):
+        """Выбор сериализатора для вывода результата работы класса."""
         serializer = RecipeSerializer(value, context=self.context)
         return serializer.data

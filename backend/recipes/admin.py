@@ -88,6 +88,8 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = (RecipeIngredientsInline,)
 
     def formfield_for_dbfield(self, db_field, **kwargs):
+        """Автоподстановка текущего пользователя в авторы рецепта при
+        создании через Админку."""
         field = super(RecipeAdmin, self).formfield_for_dbfield(
             db_field, **kwargs
         )
@@ -96,6 +98,7 @@ class RecipeAdmin(admin.ModelAdmin):
         return field
 
     def get_favorites(self, obj):
+        """Подсчет количества добавлений рецепта в Избранное."""
         # return Favorite.objects.filter(recipe=obj).count()
         return obj.favorites.count()
 
