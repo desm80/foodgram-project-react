@@ -1,19 +1,11 @@
-from django.conf import settings
-from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from djoser import utils
-from djoser.compat import get_user_email
-from djoser.serializers import SetPasswordSerializer
 from djoser.views import UserViewSet
-from rest_framework import filters, status, viewsets
-from rest_framework.decorators import action
+from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet
 
 from .models import Follow
 from .serializers import FollowSerializer
@@ -79,14 +71,3 @@ class FollowListView(ListAPIView):
     def get_queryset(self):
         return User.objects.filter(following__user=self.request.user)
         # return self.request.user.follower.all()
-
-
-
-# class FollowListView(APIView):
-#     """APIView для просмотра подписок."""
-#
-#     def get(self, request):
-#         subs = User.objects.filter(following__user=self.request.user)
-#         serializer = FollowSerializer(subs, many=True)
-#         return Response(serializer.data)
-

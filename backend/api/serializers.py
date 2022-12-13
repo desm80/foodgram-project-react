@@ -22,7 +22,6 @@ class Base64ImageField(serializers.ImageField):
 
 
 class TagSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Tag
         fields = '__all__'
@@ -33,7 +32,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Ingredient
         fields = '__all__'
@@ -83,7 +81,6 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class FavoriteShoppingSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
@@ -95,7 +92,7 @@ class IngredientForRecipeSerializer(serializers.ModelSerializer):
         validators=[MinValueValidator(
             1,
             message='Количество должно быть равным или больше 1!'
-            )
+        )
         ]
     )
 

@@ -1,5 +1,4 @@
 from api.filters import IngredientFilter, RecipeFilter
-from api.paginator import CustomPaginator
 from api.permissions import IsAdminAuthorOrReadOnly
 from api.serializers import (FavoriteShoppingSerializer, IngredientSerializer,
                              RecipePostUpdateSerializer, RecipeSerializer,
@@ -7,13 +6,11 @@ from api.serializers import (FavoriteShoppingSerializer, IngredientSerializer,
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import (IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -41,10 +38,8 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     """Описание логики работы АПИ для эндпоинта Recipe."""
     queryset = Recipe.objects.all()
-    # pagination_class = CustomPaginator
-    permission_classes = (IsAdminAuthorOrReadOnly,
-                          ) #IsAdminAuthorOrReadOnly,
-    # IsAuthenticatedOrReadOnly
+    permission_classes = (IsAdminAuthorOrReadOnly,)
+    #  IsAdminAuthorOrReadOnly, IsAuthenticatedOrReadOnly
     filterset_class = RecipeFilter
 
     def get_serializer_class(self):
@@ -87,7 +82,7 @@ class FavoriteAPIView(APIView):
     """Описание логики работы АПИ для эндпоинта Favorite."""
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request,  *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
         if Favorite.objects.filter(
@@ -125,7 +120,7 @@ class ShoppingCartAPIView(APIView):
     """Описание логики работы АПИ для эндпоинта ShoppingCart."""
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request,  *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
         if ShoppingCart.objects.filter(

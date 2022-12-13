@@ -125,4 +125,3 @@ class ShoppingCartAdmin(admin.ModelAdmin):
         'user',
         'recipe',
     )
-
