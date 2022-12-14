@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-
 from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.generics import ListAPIView
@@ -74,5 +73,5 @@ class FollowListView(ListAPIView):
 
     def get_queryset(self):
         """Получение списка Авторов, на которых"""
-        #  return User.objects.filter(following__user=self.request.user)
-        return self.request.user.follower.all()
+        return User.objects.filter(following__user=self.request.user)
+        # return self.request.user.follower.all()
