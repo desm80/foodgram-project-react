@@ -13,14 +13,13 @@ from .serializers import FollowSerializer
 User = get_user_model()
 
 
-class MyUserViewSet(UserViewSet):
+class CustomUserViewSet(UserViewSet):
     """Переопределение допустимых методов для сериализатора Djoser."""
     http_method_names = ['get', 'post', 'head']
 
 
 class FollowViewSet(APIView):
     """APIView для добавления и удаления подписки на автора."""
-    # serializer_class = FollowSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -72,6 +71,5 @@ class FollowListView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        """Получение списка Авторов, на которых"""
+        """Получение списка Авторов, на которых подписан пользователь."""
         return User.objects.filter(following__user=self.request.user)
-        # return self.request.user.follower.all()

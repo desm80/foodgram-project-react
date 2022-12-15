@@ -1,13 +1,14 @@
 from django.urls import include, path
 from djoser.views import TokenCreateView, TokenDestroyView
 from rest_framework.routers import DefaultRouter
-from users.views import FollowListView, FollowViewSet, MyUserViewSet
+
+from users.views import CustomUserViewSet, FollowListView, FollowViewSet
 
 app_name = 'users'
 
 router = DefaultRouter()
 
-router.register('users', MyUserViewSet, basename='users')
+router.register('users', CustomUserViewSet, basename='users')
 
 
 urlpatterns = [
@@ -22,5 +23,4 @@ urlpatterns = [
     path('auth/token/logout/',
          TokenDestroyView.as_view(),
          name='logout'),
-
 ]

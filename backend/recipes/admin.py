@@ -99,7 +99,6 @@ class RecipeAdmin(admin.ModelAdmin):
 
     def get_favorites(self, obj):
         """Подсчет количества добавлений рецепта в Избранное."""
-        # return Favorite.objects.filter(recipe=obj).count()
         return obj.favorites.count()
 
     get_favorites.short_description = (

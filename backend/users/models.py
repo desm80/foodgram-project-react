@@ -30,7 +30,6 @@ class User(AbstractUser):
         return self.role == self.ADMIN or self.is_superuser
 
     def __str__(self):
-        # return self.username
         return self.get_full_name()
 
 
@@ -50,7 +49,12 @@ class Follow(models.Model):
     )
 
     class Meta:
-        unique_together = ('user', 'author')
+        constraints = [
+            models.UniqueConstraint(
+                fields=('user', 'author'),
+                name='unique_follow',
+            ),
+        ]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
