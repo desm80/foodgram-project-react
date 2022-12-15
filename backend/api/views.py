@@ -86,7 +86,7 @@ class FavoriteShoppingAPIView(APIView):
         """Добавление рецепта в Избранное."""
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        if self.Model.objects.filter(
+        if self.model.objects.filter(
                 user=request.user,
                 recipe_id=recipe_id
         ).exists():
@@ -94,7 +94,7 @@ class FavoriteShoppingAPIView(APIView):
                 {'error': 'Рецепт уже добавлен в избранное'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        self.Model.objects.create(user=request.user, recipe=recipe)
+        self.model.objects.create(user=request.user, recipe=recipe)
         return Response(
             FavoriteShoppingSerializer(
                 recipe, context={'request': request}).data,
@@ -105,7 +105,7 @@ class FavoriteShoppingAPIView(APIView):
         """Удаление рецепта из Избранного."""
         recipe_id = self.kwargs['recipe_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        obj = self.Model.objects.filter(
+        obj = self.model.objects.filter(
             user=request.user,
             recipe=recipe
         )
@@ -120,9 +120,9 @@ class FavoriteShoppingAPIView(APIView):
 
 class FavoriteAPIView(FavoriteShoppingAPIView):
     """Описание логики работы АПИ для эндпоинта Favorite."""
-    Model = Favorite
+    model = Favorite
 
 
 class ShoppingCartAPIView(FavoriteShoppingAPIView):
     """Описание логики работы АПИ для эндпоинта ShoppingCart."""
-    Model = ShoppingCart
+    model = ShoppingCart
