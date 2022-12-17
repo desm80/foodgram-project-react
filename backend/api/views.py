@@ -44,8 +44,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         if self.request.method == 'GET':
             return RecipeSerializer
-        else:
-            return RecipePostUpdateSerializer
+        return RecipePostUpdateSerializer
 
     def perform_create(self, serializer):
         """Подстановка текущего пользователя в авторы рецепта."""
