@@ -1,3 +1,7 @@
+![Yambd workflow](https://github.
+com/desm80/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.
+svg)
+
 # Продуктовый помощник - foodgram
 
 Приложение, в котором пользователи могут публиковать рецепты, подписываться 

@@ -157,8 +157,7 @@ class RecipePostUpdateSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
-        recipe = self.add_ingredient_tag(ingredients, tags, recipe)
-        return recipe
+        return self.add_ingredient_tag(ingredients, tags, recipe)
 
     def update(self, instance, validated_data):
         """Обновление рецепта."""
@@ -167,8 +166,7 @@ class RecipePostUpdateSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
         super().update(instance, validated_data)
-        instance = self.add_ingredient_tag(ingredients, tags, instance)
-        return instance
+        return self.add_ingredient_tag(ingredients, tags, instance)
 
     def to_representation(self, value):
         """Выбор сериализатора для вывода результата работы класса."""
