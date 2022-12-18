@@ -1,7 +1,7 @@
 ![Foodgram_workflow](https://github.com/desm80/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
 # Мой стек технологий
-img src="https://img.shields.io/badge/Python-7FFFD4?style=for-the-badge&logo=python&logoColor=black"/ img src="https://img.shields.io/badge/Django-7FFFD4?style=for-the-badge&logo=django&logoColor=black"/ img src="https://img.shields.io/badge/DjangoRESTFramework-7FFFD4/ img src="https://img.shields.io/badge/PostgreSQL-7FFFD4?style=for-the-badge&logo=posgresql&logoColor=black"/  img src="https://img.shields.io/badge/NGINX-7FFFD4?style=for-the-badge&logo=posgresql&logoColor=black"/ img src="https://img.shields.io/badge/gunicorn-7FFFD4?style=for-the-badge&logo=gunicorn&logoColor=black"/ img src="https://img.shields.io/badge/Docker-7FFFD4?style=for-the-badge&logo=docker&logoColor=black"/
+<img src="https://img.shields.io/badge/Python-7FFFD4?style=for-the-badge&logo=python&logoColor=black"/> <img src="https://img.shields.io/badge/Django-7FFFD4?style=for-the-badge&logo=django&logoColor=black"/> <img src="https://img.shields.io/badge/DjangoRESTFramework-7FFFD4/> <img src="https://img.shields.io/badge/PostgreSQL-7FFFD4?style=for-the-badge&logo=posgresql&logoColor=black"/>  <img src="https://img.shields.io/badge/NGINX-7FFFD4?style=for-the-badge&logo=nginx&logoColor=black"/> <img src="https://img.shields.io/badge/gunicorn-7FFFD4?style=for-the-badge&logo=gunicorn&logoColor=black"/> <img src="https://img.shields.io/badge/Docker-7FFFD4?style=for-the-badge&logo=docker&logoColor=black"/>
 
 # Продуктовый помощник - foodgram
 
@@ -28,7 +28,7 @@ img src="https://img.shields.io/badge/Python-7FFFD4?style=for-the-badge&logo=pyt
 * Пароль: user2gfhjkm
 
 
-## Запуск проекта в Докер Контейнерах:
+## Запуск проекта в Docker контейнерах:
 
 ### Склонировать репозиторий на ВМ:
 
@@ -80,5 +80,10 @@ API вы сможете
 * ```TELEGRAM_TO``` - id своего телеграм-аккаунта (можно узнать у @userinfobot, команда /start)
 * ```TELEGRAM_TOKEN``` - токен бота (получить токен можно у @BotFather, /token, имя бота)
 
-foodgram_workflow запускается после команды git push в ветку main вашего 
+foodgram_workflow запускается после команды git push в ветку master вашего 
 репозитория.
+
+
+## Авторы
+backend - Смирнов Денис
+frontend - команда ЯндексПрактикум 
